@@ -11,6 +11,10 @@ You may obtain a copy of the License at
         https://github.com/emc-openstack/freeware-eula/
         blob/master/Freeware_EULA_20131217_modified.md
         
+
+Overview
+--------
+
 The EMCSMISISCSIDriver is based on the existing ISCSIDriver, with the ability to create/delete and attach/detach volumes and create/delete snapshots, etc.
 
 The EMCSMISISCSIDriver executes the volume operations by communicating with the backend EMC storage. It uses a CIM client in python called PyWBEM to make CIM operations over HTTP.
