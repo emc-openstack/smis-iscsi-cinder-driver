@@ -32,28 +32,28 @@ Supported Operations
 --------------------
 
 The following operations will be supported on both VMAX and VNX arrays:
-•	Create volume
-•	Delete volume
-•	Attach volume
-•	Detach volume
-•	Create snapshot
-•	Delete snapshot
-•	Create cloned volume
-•	Copy image to volume
-•	Copy volume to image
+* Create volume
+* Delete volume
+* Attach volume
+* Detach volume
+* Create snapshot
+* Delete snapshot
+* Create cloned volume
+* Copy image to volume
+* Copy volume to image
 
 The following operations will be supported on VNX only:
-•	Create volume from snapshot
-•	Extend volume
+* Create volume from snapshot
+* Extend volume
 
 Preparation
 -----------
 
-•	Install python-pywbem package. For example:
+* Install python-pywbem package. For example:
 $sudo apt-get install python-pywbem
-•	Setup SMI-S. Download SMI-S from EMC Support website and install it following the instructions of SMI-S release notes. Add your VNX/VMAX arrays to SMI-S following the SMI-S release notes.
-•	Register with VNX.
-•	Create Masking View on VMAX.
+* Setup SMI-S. Download SMI-S from EMC Support website and install it following the instructions of SMI-S release notes. Add your VNX/VMAX arrays to SMI-S following the SMI-S release notes.
+* Register with VNX.
+* Create Masking View on VMAX.
 
 Register with VNX
 -----------------
