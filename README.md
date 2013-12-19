@@ -1,7 +1,5 @@
-smis-iscsi-cinder-driver
-========================
-
 SMI-S iSCSI Cinder Driver for Havana
+====================================
 
 Copyright (c) 2013 EMC Corporation
 All Rights Reserved
@@ -21,15 +19,17 @@ The EMC CIM Object Manager (ECOM) is packaged with the EMC SMI-S Provider. It is
 
 The EMC SMI-S Provider supports the SNIA Storage Management Initiative (SMI), an ANSI standard for storage management. It supports VMAX and VNX storage systems.
 
- Requirements
- 
+Requirements
+------------ 
+
 EMC SMI-S Provider V4.5.1 and higher is required. SMI-S can be downloaded from EMC's support web site.  SMI-S can be installed on a non-OpenStack host.  Supported platforms include different flavors of Windows, RedHat, and SuSE Linux.  Refer to the EMC SMI-S Provider release notes for supported platforms and installation instructions.  Note that storage arrays have to be discovered on the SMI-S server before using Cinder Driver.  Follow instructions in the release notes to discover the arrays.
 
 SMI-S is usually installed at /opt/emc/ECIM/ECOM/bin on Linux and C:\Program Files\EMC\ECIM\ECOM\bin on Windows.  After installing and configuring SMI-S, go to that directory and type “TestSmiProvider.exe”.  After entering the test program, type “dv” and examine the output.  Make sure that the arrays are recognized by the SMI-S server before using Cinder Driver.
 
 EMC storage VMAX Family and VNX Series are supported.
 
- Supported Operations
+Supported Operations
+--------------------
 
 The following operations will be supported on both VMAX and VNX arrays:
 •	Create volume
@@ -46,7 +46,8 @@ The following operations will be supported on VNX only:
 •	Create volume from snapshot
 •	Extend volume
 
- Preparation
+Preparation
+-----------
 
 •	Install python-pywbem package. For example:
 $sudo apt-get install python-pywbem
@@ -54,7 +55,8 @@ $sudo apt-get install python-pywbem
 •	Register with VNX.
 •	Create Masking View on VMAX.
 
- Register with VNX
+Register with VNX
+-----------------
 
 For a VNX volume to be exported to a Compute node, the node needs to be registered with VNX first.
 On the Compute node 1.1.1.1, do the following (assume 10.10.61.35 is the iscsi target):
@@ -81,16 +83,19 @@ Log in to VNX from the Compute node using the target corresponding to the SPB po
 $ sudo iscsiadm -m node -T iqn.1992-04.com.emc:cx.apm01234567890.b8 -p 10.10.10.11 -l
                    
 In Unisphere register the initiator with the SPB port.
+
 Log out:
 $ sudo iscsiadm -m node -u
 
 Repeat the above steps to register all SPA and SPB ports configured on VNX.
                         
- Create Masking View on VMAX
- 
+Create Masking View on VMAX
+---------------------------
+
 For VMAX, user needs to do initial setup on the Unisphere for VMAX server first. On the Unisphere for VMAX server, create initiator group, storage group, port group, and put them in a masking view. Initiator group contains the initiator names of the openstack hosts. Storage group should have at least 6 gatekeepers.
 
- Config file cinder.conf
+Config file cinder.conf
+-----------------------
 
 Make the following changes in /etc/cinder/cinder.conf.
 
@@ -108,7 +113,8 @@ cinder_emc_config_file = /etc/cinder/cinder_emc_config.xml
                          
 Restart the cinder-volume service.
 
- Config file cinder_emc_config.xml
+Config file cinder_emc_config.xml
+---------------------------------
 
 Create the file /etc/cinder/cinder_emc_config.xml. We don't need to restart service for this change.
 
@@ -140,6 +146,7 @@ StorageType is the thin pool where user wants to create volume from.  Thin pools
 EcomServerIp and EcomServerPort are the IP address and port number of the ECOM server which is packaged with SMI-S. EcomUserName and EcomPassword are credentials for the ECOM server.
 
 Multiple Pools and Thick/Thin Provisioning
+------------------------------------------
 
 There’s an enhancement to support multiple pools and thick provisioning in addition to thin provisioning.  
 
