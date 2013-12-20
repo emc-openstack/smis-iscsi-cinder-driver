@@ -26,7 +26,11 @@ The EMC SMI-S Provider supports the SNIA Storage Management Initiative (SMI), an
 Supported OpenStack Releases
 ----------------------------
 
-This driver supports Havana. This is an enhanced version compared to the EMC SMI-S iSCSI Cinder Driver in the official OpenStack github stably/havana branch.
+This driver supports Havana. This is an enhanced version compared to the EMC SMI-S iSCSI Cinder Driver in the official OpenStack github stably/havana branch.  It has the following enhancements:
+
+* Multiple pools and thick/thin Provisioning.
+* Performance enhancement.
+* Extend volume for VNX.
 
 The Grizzly version can be found in the official OpenStack github stable/grizzly branch.  The URL is  https://github.com/openstack/cinder/tree/master/cinder/volume/drivers/emc.
 
