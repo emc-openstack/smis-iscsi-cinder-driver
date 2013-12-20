@@ -32,6 +32,8 @@ SMI-S is usually installed at /opt/emc/ECIM/ECOM/bin on Linux and C:\Program Fil
 
 EMC storage VMAX Family and VNX Series are supported.
 
+Copy updated emc_smis_iscsi.py and emc_smis_common.py from the source location to the cinder/volume/drivers/emc folder on the server where you are running cinder-volume service.  It is usually at /usr/share/pyshared/cinder/volume/drivers/emc or /opt/stack/cinder/cinder/volume/drivers/emc.
+
 Supported Operations
 --------------------
 
