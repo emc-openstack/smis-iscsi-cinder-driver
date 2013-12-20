@@ -54,7 +54,9 @@ Preparation
 -----------
 
 * Install python-pywbem package. For example:
+```
 $sudo apt-get install python-pywbem
+```
 * Setup SMI-S. Download SMI-S from EMC Support website and install it following the instructions of SMI-S release notes. Add your VNX/VMAX arrays to SMI-S following the SMI-S release notes.
 * Register with VNX.
 * Create Masking View on VMAX.
@@ -64,32 +66,38 @@ Register with VNX
 
 For a VNX volume to be exported to a Compute node, the node needs to be registered with VNX first.
 On the Compute node 1.1.1.1, do the following (assume 10.10.61.35 is the iscsi target):
+```
 $ sudo /etc/init.d/open-iscsi start
-                        
 $ sudo iscsiadm -m discovery -t st -p 10.10.61.35
-                        
 $ cd /etc/iscsi
-                        
 $ sudo more initiatorname.iscsi
-                        
 $ iscsiadm -m node
-                        
+```
+
 Log in to VNX from the Compute node using the target corresponding to the SPA port:
+```
 $ sudo iscsiadm -m node -T iqn.1992-04.com.emc:cx.apm01234567890.a0 -p 10.10.61.35 -l
-                        
+```
+
 Assume iqn.1993-08.org.debian:01:1a2b3c4d5f6g is the initiator name of the Compute node. Login to Unisphere, go to VNX00000->Hosts->Initiators, Refresh and wait until initiator iqn.1993-08.org.debian:01:1a2b3c4d5f6g with SP Port A-8v0 appears.
 
 Click the "Register" button, select "CLARiiON/VNX" and enter the host name myhost1 and IP address myhost1. Click Register. Now host 1.1.1.1 will appear under Hosts->Host List as well.
 Log out of VNX on the Compute node:
+```
 $ sudo iscsiadm -m node -u
-                        
+```
+
 Log in to VNX from the Compute node using the target corresponding to the SPB port:
+```
 $ sudo iscsiadm -m node -T iqn.1992-04.com.emc:cx.apm01234567890.b8 -p 10.10.10.11 -l
-                   
+```
+
 In Unisphere register the initiator with the SPB port.
 
 Log out:
+```
 $ sudo iscsiadm -m node -u
+```
 
 Repeat the above steps to register all SPA and SPB ports configured on VNX.
                         
@@ -104,17 +112,21 @@ Config file cinder.conf
 Make the following changes in /etc/cinder/cinder.conf.
 
 For VMAX, we have the following entries where 10.10.61.45 is the IP address of the VMAX iscsi target.
+```
 iscsi_target_prefix = iqn.1992-04.com.emc
 iscsi_ip_address = 10.10.61.45
 volume_driver = cinder.volume.drivers.emc.emc_smis_iscsi.EMCISCSIDriver
 cinder_emc_config_file = /etc/cinder/cinder_emc_config.xml
-                        
+```
+
 For VNX, we have the following entries where 10.10.61.35 is the IP address of the VNX iscsi target.
+```
 iscsi_target_prefix = iqn.2001-07.com.vnx
 iscsi_ip_address = 10.10.61.35
 volume_driver = cinder.volume.drivers.emc.emc_smis_iscsi.EMCISCSIDriver
 cinder_emc_config_file = /etc/cinder/cinder_emc_config.xml
-                         
+```
+
 Restart the cinder-volume service.
 
 Config file cinder_emc_config.xml
@@ -123,6 +135,7 @@ Config file cinder_emc_config.xml
 Create the file /etc/cinder/cinder_emc_config.xml. We don't need to restart service for this change.
 
 For VMAX, we have the following in the xml file:
+```
 <?xml version='1.0' encoding='UTF-8'?>
 <EMC>
 <StorageType>xxxx</StorageType>
@@ -132,8 +145,10 @@ For VMAX, we have the following in the xml file:
 <EcomUserName>xxxxxxxx</EcomUserName>
 <EcomPassword>xxxxxxxx</EcomPassword>
 </EMC>
-                        
+```
+
 For VNX, we have the following in the xml file:
+```
 <?xml version='1.0' encoding='UTF-8'?>
 <EMC>
 <StorageType>xxxx</StorageType>
@@ -142,7 +157,8 @@ For VNX, we have the following in the xml file:
 <EcomUserName>xxxxxxxx</EcomUserName>
 <EcomPassword>xxxxxxxx</EcomPassword>
 </EMC>
-                        
+```
+
 MaskingView is required for attaching VMAX volumes to an OpenStack VM. A Masking View can be created using Unisphere for VMAX. The Masking View needs to have an Initiator Group that contains the initiator of the OpenStack compute node that hosts the VM.
 
 StorageType is the thin pool where user wants to create volume from.  Thin pools can be created using Unisphere for VMAX and VNX.  Note that the StorageType tag is not required any more in this Havana release.  Refer to the following "Multiple Pools and Thick/Thin Provisioning" section on how to support thick/thin provisioning.
@@ -162,12 +178,14 @@ With this enhancement, the <StorageType> tag in cinder_emc_config.xml is not man
 
 Here is an example of how to use method 2.   First create volume types.  Then define extra specs for each volume type.
 
+```
 cinder --os-username admin --os-tenant-name admin type-create "High Performance"
 cinder --os-username admin --os-tenant-name admin type-create "Standard Performance"
 cinder --os-username admin --os-tenant-name admin type-key "High Performance" set storagetype:pool=smi_pool
 cinder --os-username admin --os-tenant-name admin type-key "High Performance" set storagetype:provisioning=thick
 cinder --os-username admin --os-tenant-name admin type-key "Standard Performance" set storagetype:pool=smi_pool
 cinder --os-username admin --os-tenant-name admin type-key "Standard Performance" set storagetype:provisioning=thin
+```
 
 In the above example, two volume types are created.  They are “High Performance” and “Standard Performance”.   For High Performance, “storagetype:pool” is set to “smi_pool” and “storagetype:provisioning” is set to “thick”.  Similarly for Standard Performance, “storagetype:pool” is set to “smi_pool” and “storagetype:provisioning” is set to “thin”.  If “storagetype:provisioning” is not specified, it will be default to thin.
 
@@ -179,6 +197,7 @@ Multiple Backends
 
 Here is an example of how to support multiple backends. To support two backends emc-vnx and emc-vmax, add the following in cinder.conf:
 
+```
 enabled_backends=emc-vnx,emc-vmax
 [emc-vnx]
 volume_driver = cinder.volume.drivers.emc.emc_smis_iscsi.EMCSMISISCSIDriver
@@ -192,15 +211,18 @@ iscsi_target_prefix = iqn.1992-04.com.emc
 iscsi_ip_address = 10.10.61.45
 cinder_emc_config_file = /etc/cinder/cinder_emc_config.vmax.xml
 volume_backend_name=emc-vmax
+```
 
 Then create two volume-type referring to emc-vnx and emc-vmax:
 
+```
 root@core:/etc/init.d# cinder extra-specs-list
 +--------------------------------------+----------+---------------------------------------+
 |                  ID                  |   Name   |              extra_specs              |
 +--------------------------------------+----------+---------------------------------------+
 | 42c62c3f-fd41-4eb4-afc5-584f607c52f8 | emc-vmax | {u'volume_backend_name': u'emc-vmax'} |
 | 4f8d8f90-f252-4980-ac3d-4c5a79bb9ef7 | emc-vnx  |  {u'volume_backend_name': u'emc-vnx'} |
+```
 
 In addition to “volume_backend_name” for multiple backend support, you also need to add “storagetype:pool” to the volume-type.  “storagetype:provisioning” is optional.  By default it is thin.
 
