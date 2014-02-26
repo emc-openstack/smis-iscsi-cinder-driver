@@ -128,7 +128,7 @@ For VMAX, we have the following entries where 10.10.61.45 is the IP address of t
 ```
 iscsi_target_prefix = iqn.1992-04.com.emc
 iscsi_ip_address = 10.10.61.45
-volume_driver = cinder.volume.drivers.emc.emc_smis_iscsi.EMCISCSIDriver
+volume_driver = cinder.volume.drivers.emc.emc_smis_iscsi.EMCSMISISCSIDriver
 cinder_emc_config_file = /etc/cinder/cinder_emc_config.xml
 ```
 
