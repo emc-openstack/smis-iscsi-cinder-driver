@@ -136,7 +136,7 @@ For VNX, we have the following entries where 10.10.61.35 is the IP address of th
 ```
 iscsi_target_prefix = iqn.2001-07.com.vnx
 iscsi_ip_address = 10.10.61.35
-volume_driver = cinder.volume.drivers.emc.emc_smis_iscsi.EMCISCSIDriver
+volume_driver = cinder.volume.drivers.emc.emc_smis_iscsi.EMCSMISISCSIDriver
 cinder_emc_config_file = /etc/cinder/cinder_emc_config.xml
 ```
 
